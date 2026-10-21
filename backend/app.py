@@ -27,9 +27,17 @@ app = FastAPI(
     description="Indian Sign Language demo subset + VerbX STT/TTS/translate. VerbX does not recognize signs.",
     lifespan=lifespan,
 )
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"],
+    allow_origins=[
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+        "https://isl-bridge-xivercel.app",
+        "https://isl-bridge-main-habeeba45.vercel.app",
+        "https://isl-bridge-fp2ykuqg6-habeeba45.vercel.app",
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
