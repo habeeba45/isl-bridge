@@ -2,12 +2,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { api, browserSpeak, playBase64Audio } from "./api";
 import CameraStage from "./components/CameraStage.jsx";
 import SignGlyph from "./components/SignGlyph.jsx";
+import DatasetRecorder from "./components/DatasetRecorder.jsx";
 
 const TABS = [
   { id: "signs", label: "TC1 Supported signs" },
   { id: "sign2speech", label: "TC2 Sign → speech" },
   { id: "speech2sign", label: "TC3 Speech → sign" },
   { id: "safety", label: "TC4 Safety & evidence" },
+  { id: "dataset", label: "Dataset recorder" },
 ];
 
 export default function App() {
@@ -461,6 +463,10 @@ function startBrowserStt() {
               </button>
             </div>
           </section>
+        )}
+
+        {tab === "dataset" && catalog && (
+          <DatasetRecorder signs={catalog.signs} enabled={consented} />
         )}
 
         {tab === "safety" && (

@@ -17,3 +17,6 @@ Thumbs.db
 *.mp3
 !frontend/public/**
 .vscode/
+
+# Recorded landmark clips (personal data; commit only with consent)
+backend/data/samples/

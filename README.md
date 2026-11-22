@@ -94,6 +94,40 @@ http://127.0.0.1:5173
 
 The Vite development proxy forwards `/api` requests to `http://127.0.0.1:8001`. Keep this setting in `frontend/vite.config.js` consistent with the backend port.
 
+## Evaluation (recognition accuracy)
+
+The repository includes tools to measure how well the recognizer works on real people, and to compare it with learned baselines.
+
+### 1. Record labelled clips
+
+Run the app locally, grant consent, and open the **Dataset recorder** tab.
+
+- Choose a signer code (S1, S2, …), the lighting, and a label, then press **Record sample**. Each sample is a 2.5-second clip of MediaPipe hand landmarks, the same window that **Classify current pose** uses. No video is stored.
+- Record every sign several times (20+ per signer is a good target). Also record **NEGATIVE** clips: random movements and hand shapes that are not one of the 10 signs.
+- Record other people only with their consent, using anonymous codes.
+- Press **Export JSONL** often and save the files in `backend/data/samples/`. This folder is git-ignored by default.
+
+### 2. Run the evaluation
+
+```powershell
+cd backend
+pip install -r requirements-eval.txt
+python -m evaluation.evaluate data/samples/*.jsonl --title "ISL Bridge evaluation"
+```
+
+The script writes `runs/eval/<timestamp>/report.md`, `metrics.json` and confusion-matrix images. It reports:
+
+- **Rule-based recognizer (deployed):** sign accuracy, wrong-sign rate, UNRECOGNIZED rate, false-accept rate on NEGATIVE clips, macro-F1, per-sign recall, the reasons for UNRECOGNIZED, and breakdowns by signer and by lighting.
+- **Learned baselines** (logistic regression, k-NN and random forest) on wrist-normalized landmark features:
+  - Leave-one-signer-out evaluation, which estimates performance on a new user.
+  - Pooled k-fold evaluation, which is optimistic because the same people appear in training and test data.
+
+`python -m evaluation.synthetic --out synthetic.jsonl` generates **synthetic stick-figure clips for testing the pipeline only**. Results on synthetic data are not accuracy results.
+
+### Results
+
+_Not yet measured. Results will be added here after recording real clips._
+
 ## Configure VerbX
 
 1. Register using your Ziro email at [VerbX](https://one.verbxeco.com).

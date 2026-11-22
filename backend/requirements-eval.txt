@@ -1,0 +1,6 @@
+# Offline evaluation only (not needed by the deployed API).
+-r requirements.txt
+numpy>=1.26
+scikit-learn>=1.4
+matplotlib>=3.8
+pytest>=8
